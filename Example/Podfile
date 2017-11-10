@@ -1,0 +1,13 @@
+#use_frameworks!
+
+target 'YLT_InputAccessoryView_Example' do
+  pod 'YLT_InputAccessoryView', :path => '../'
+  pod 'ReactiveObjC'
+  pod 'Masonry'
+  pod 'YLT_RecordAudio'
+  target 'YLT_InputAccessoryView_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
