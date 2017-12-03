@@ -14,6 +14,7 @@
 #import <NSObject+YLT_BaseObject.h>
 #import <RMUniversalAlert/RMUniversalAlert.h>
 
+
 #define LEFT_SPACING 4
 #define RIGHT_SPACING 4
 
@@ -37,6 +38,8 @@
 
 @property (nonatomic, copy) void(^actionBlock)(UIButton *button);
 
+@property (nonatomic, copy) void(^addActionBlock)(NSInteger index);
+
 @property (nonatomic, copy) void(^fileBlock)(NSDictionary *files);
 
 @end
@@ -46,12 +49,14 @@
 + (YLT_AccessoryView *)showInputAccessoryViewConfig:(void(^)(YLT_AccessoryConfig * config))config
                                     textChangeBlock:(void(^)(NSString *text))textChangeBlock
                                         actionBlock:(void(^)(UIButton *button))actionBlock
+                                     addActionBlock:(void(^)(NSInteger index))addActionBlock
                                           fileBlock:(void(^)(NSDictionary *files))fileBlock {
     YLT_AccessoryView *result = [[[self class] alloc] init];
     result.configer = [[YLT_AccessoryConfig alloc] init];
     !config?:config(result.configer);
     result.textChangeBlock = textChangeBlock;
     result.actionBlock = actionBlock;
+    result.addActionBlock = addActionBlock;
     result.fileBlock = fileBlock;
     [result show];
     return result;
@@ -398,7 +403,7 @@
 - (UIView *)faceInputView {
     if (!_faceInputView) {
         _faceInputView = [[UIView alloc] init];
-        _faceInputView.backgroundColor = [UIColor redColor];
+        
     }
     return _faceInputView;
 }
@@ -406,10 +411,15 @@
 - (YLT_AddInputView *)addInputView {
     if (!_addInputView) {
         _addInputView = [YLT_AddInputView showInputViewConfig:^(YLT_AddInputConfig *config) {
-            [config.models addObject:[YLT_AddInputModel modelImage:YLT_AccessoryImage(@"loudon") name:@"图片"]];
-            [config.models addObject:[YLT_AddInputModel modelImage:YLT_AccessoryImage(@"loudon") name:@"相机"]];
-            [config.models addObject:[YLT_AddInputModel modelImage:YLT_AccessoryImage(@"loudon") name:@"视频聊天"]];
+            [config.models addObject:[YLT_AddInputModel modelImage:YLT_AccessoryImage(@"mes_itempic") name:@"图片"]];
+            [config.models addObject:[YLT_AddInputModel modelImage:YLT_AccessoryImage(@"mes_itemphoto") name:@"相机"]];
+            [config.models addObject:[YLT_AddInputModel modelImage:YLT_AccessoryImage(@"mes_itemcall") name:@"语音"]];
+            [config.models addObject:[YLT_AddInputModel modelImage:YLT_AccessoryImage(@"mes_itemloc") name:@"语音"]];
+            [config.models addObject:[YLT_AddInputModel modelImage:YLT_AccessoryImage(@"mes_friends") name:@"个人名片"]];
         } actionBlock:^(NSInteger index) {
+            if (self.addActionBlock) {
+                self.addActionBlock(index);
+            }
             switch (index) {
                 case 0: {//相册
                     [[YLT_AuthorizationHelper shareInstance] YLT_AuthorizationType:YLT_PhotoLibrary success:^{
@@ -464,6 +474,14 @@
         [[_recordBtn rac_signalForControlEvents:UIControlEventTouchDown] subscribeNext:^(__kindof UIControl * _Nullable x) {
             [[YLT_RecordManager manager] YLT_StartRecord];
             [YLT_RecordProgressHUD YLT_Show];
+        }];
+        
+        [[_recordBtn rac_signalForControlEvents:UIControlEventTouchDragOutside] subscribeNext:^(__kindof UIControl * _Nullable x) {
+            [YLT_RecordProgressHUD YLT_RecordStatus:YLT_RecordStatusLooseToCancel];
+        }];
+        
+        [[_recordBtn rac_signalForControlEvents:UIControlEventTouchDragInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
+            [YLT_RecordProgressHUD YLT_RecordStatus:YLT_RecordStatusRecording];
         }];
         
         [[_recordBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {

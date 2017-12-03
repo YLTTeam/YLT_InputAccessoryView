@@ -6,7 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "YLT_CollectionViewFlowLayout.h"
+#import <YLT_Kit/YLT_Kit.h>
 
 @interface YLT_AddInputModel : NSObject
 
@@ -23,7 +23,7 @@
 /**
  布局样式 可以自定义 
  */
-@property (nonatomic, strong) YLT_CollectionViewFlowLayout *flowLayout;
+@property (nonatomic, strong) YLT_HorizontalFlowLayout *flowLayout;
 /**
  显示的内容
  */

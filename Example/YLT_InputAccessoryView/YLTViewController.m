@@ -42,6 +42,8 @@
         NSLog(@"%@", text);
     } actionBlock:^(UIButton *button) {
         NSLog(@"%@", button);
+    } addActionBlock:^(NSInteger index) {
+        NSLog(@"添加事件的回调");
     } fileBlock:^(NSDictionary *files) {
         NSLog(@"%@", files);
         self.files = files;

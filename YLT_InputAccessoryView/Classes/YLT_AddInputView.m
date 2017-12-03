@@ -57,7 +57,7 @@
     self.frame = CGRectMake(0, 0, YLT_SCREEN_WIDTH, self.configer.height);
     self.backgroundColor = self.configer.bgColor;
     if (!self.configer.flowLayout) {
-        YLT_CollectionViewFlowLayout *flowLayout = [[YLT_CollectionViewFlowLayout alloc] init];
+        YLT_HorizontalFlowLayout *flowLayout = [[YLT_HorizontalFlowLayout alloc] init];
         self.configer.flowLayout = flowLayout;
         flowLayout.itemSize = CGSizeMake(YLT_SCREEN_WIDTH/4., self.configer.height/2.);
         flowLayout.minimumInteritemSpacing = 0.;
@@ -103,7 +103,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         _thumbImageView = [[UIImageView alloc] init];
-        _thumbImageView.contentMode = UIViewContentModeScaleAspectFit;
+        _thumbImageView.contentMode = UIViewContentModeScaleAspectFill;
         [self addSubview:_thumbImageView];
         [_thumbImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(self);

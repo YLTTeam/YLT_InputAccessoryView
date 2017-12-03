@@ -42,8 +42,10 @@ TODO: Add long description of the pod here.
   s.dependency 'Masonry'
   s.dependency 'ReactiveObjC'
   s.dependency 'YLT_BaseLib'
+  s.dependency 'YLT_Kit'
   s.dependency 'SZTextView'
   s.dependency 'YLT_RecordAudio'
   s.dependency 'TZImagePickerController'
   s.dependency 'RMUniversalAlert'
+# s.dependency 'YLT_Faceboard'
 end

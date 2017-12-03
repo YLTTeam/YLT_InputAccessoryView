@@ -45,8 +45,8 @@
         _audioBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
         _audioBtn.tag = YLT_AUDIO_TAG;
         
-        [_audioBtn setImage:YLT_AccessoryImage(@"loudon") forState:UIControlStateNormal];
-        [_audioBtn setImage:YLT_AccessoryImage(@"loud") forState:UIControlStateSelected];
+        [_audioBtn setImage:YLT_AccessoryImage(@"mes_record") forState:UIControlStateNormal];
+        [_audioBtn setImage:YLT_AccessoryImage(@"mes_key") forState:UIControlStateSelected];
     }
     return _audioBtn;
 }
@@ -56,7 +56,8 @@
         _faceBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _faceBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
         _faceBtn.tag = YLT_FACE_TAG;
-        [_faceBtn setImage:YLT_AccessoryImage(@"loudon") forState:UIControlStateNormal];
+        [_faceBtn setImage:YLT_AccessoryImage(@"mes_expression") forState:UIControlStateNormal];
+        [_faceBtn setImage:YLT_AccessoryImage(@"mes_key") forState:UIControlStateSelected];
     }
     return _faceBtn;
 }
@@ -66,7 +67,8 @@
         _addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _addBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
         _addBtn.tag = YLT_ADD_TAG;
-        [_addBtn setImage:YLT_AccessoryImage(@"loudon") forState:UIControlStateNormal];
+        [_addBtn setImage:YLT_AccessoryImage(@"mes_otherfun") forState:UIControlStateNormal];
+        [_addBtn setImage:YLT_AccessoryImage(@"mes_key") forState:UIControlStateSelected];
     }
     return _addBtn;
 }
