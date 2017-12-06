@@ -47,6 +47,8 @@
     } fileBlock:^(NSDictionary *files) {
         NSLog(@"%@", files);
         self.files = files;
+    } sendAction:^(NSString *value){
+        NSLog(@"发送事件 %@", value);
     }];
     [self.view addSubview:self.input];
     

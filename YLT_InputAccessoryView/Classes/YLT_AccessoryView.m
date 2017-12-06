@@ -13,6 +13,7 @@
 #import <TZImagePickerController/TZImagePickerController.h>
 #import <NSObject+YLT_BaseObject.h>
 #import <RMUniversalAlert/RMUniversalAlert.h>
+#import <YLT_Faceboard/YLT_Faceboard.h>
 
 
 #define LEFT_SPACING 4
@@ -42,15 +43,28 @@
 
 @property (nonatomic, copy) void(^fileBlock)(NSDictionary *files);
 
+@property (nonatomic, copy) void(^sendBlock)(NSString *value);
+
 @end
 
 @implementation YLT_AccessoryView
 
+/**
+ 生成input accessory view
+ 
+ @param config 配置
+ @param textChangeBlock 文本修改的回调
+ @param actionBlock 事件回调
+ @param addActionBlock 事件回调
+ @param fileBlock 文件回调
+ @param sendBlock 发送按钮的回调
+ */
 + (YLT_AccessoryView *)showInputAccessoryViewConfig:(void(^)(YLT_AccessoryConfig * config))config
                                     textChangeBlock:(void(^)(NSString *text))textChangeBlock
                                         actionBlock:(void(^)(UIButton *button))actionBlock
                                      addActionBlock:(void(^)(NSInteger index))addActionBlock
-                                          fileBlock:(void(^)(NSDictionary *files))fileBlock {
+                                          fileBlock:(void(^)(NSDictionary *file))fileBlock
+                                         sendAction:(void(^)(NSString *))sendBlock {
     YLT_AccessoryView *result = [[[self class] alloc] init];
     result.configer = [[YLT_AccessoryConfig alloc] init];
     !config?:config(result.configer);
@@ -58,6 +72,7 @@
     result.actionBlock = actionBlock;
     result.addActionBlock = addActionBlock;
     result.fileBlock = fileBlock;
+    result.sendBlock = sendBlock;
     [result show];
     return result;
 }
@@ -403,7 +418,37 @@
 - (UIView *)faceInputView {
     if (!_faceInputView) {
         _faceInputView = [[UIView alloc] init];
-        
+        @weakify(self);
+        [YLT_FaceboardView showFaceboardConfig:^(YLT_FaceboardConfig *config) {
+            @strongify(self);
+            config.superView = self.faceInputView;
+            config.inputView = self.configer.inputTextView;
+            config.toolBarHidden = NO;
+            
+            YLT_FaceboardGroupModel *mo = [YLT_FaceboardGroupModel normalGroupModel];
+            [config.keyboards addObject:mo];
+            
+            UIButton *sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            [sendBtn setTitle:@"发送" forState:UIControlStateNormal];
+            [sendBtn setTitleColor:self.configer.textColor forState:UIControlStateNormal];
+            [config.rightBtns addObject:sendBtn];
+            
+            [[sendBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
+                @strongify(self);
+                if (self.sendBlock) {
+                    if (self.configer.inputTextView) {
+                        self.sendBlock(self.configer.inputTextView.text);
+                        self.configer.inputTextView.text = @"";
+                    } else {
+                        self.sendBlock(@"");
+                    }
+                }
+            }];
+            
+            config.faceAction = ^(YLT_FaceboardType faceboardType, YLT_FaceModel *faceModel) {
+                NSLog(@"%zd -- >> %@", faceboardType, faceModel.faceName);
+            };
+        }];
     }
     return _faceInputView;
 }
@@ -440,7 +485,7 @@
                     break;
                 case 1: {//相机
                     [[YLT_AuthorizationHelper shareInstance] YLT_AuthorizationType:YLT_Camera success:^{
-                        [YLT_PhotoHelper YLT_PhotoFromCamera:^(NSDictionary *info) {
+                        [YLT_PhotoHelper YLT_PhotoFromCameraAllowEdit:YES success:^(NSDictionary *info) {
                             UIImage *image = info[UIImagePickerControllerOriginalImage];
                             self.fileBlock(@{@"type":@(PhotoType), @"data":@[image]});
                             [self.configer.inputTextView performSelector:@selector(becomeFirstResponder) withObject:nil afterDelay:0.2];

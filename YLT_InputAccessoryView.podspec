@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'YLT_InputAccessoryView'
-  s.version          = '0.1.0'
+  s.version          = '0.0.1'
   s.summary          = 'A short description of YLT_InputAccessoryView.'
 
 # This description is used to generate tags and improve search results.
@@ -47,5 +47,5 @@ TODO: Add long description of the pod here.
   s.dependency 'YLT_RecordAudio'
   s.dependency 'TZImagePickerController'
   s.dependency 'RMUniversalAlert'
-# s.dependency 'YLT_Faceboard'
+  s.dependency 'YLT_Faceboard'
 end

@@ -28,11 +28,13 @@ typedef NS_ENUM(NSUInteger, FileType) {
  @param actionBlock 事件回调
  @param addActionBlock 事件回调
  @param fileBlock 文件回调
+ @param sendBlock 发送按钮的回调
  */
 + (YLT_AccessoryView *)showInputAccessoryViewConfig:(void(^)(YLT_AccessoryConfig * config))config
                                     textChangeBlock:(void(^)(NSString *text))textChangeBlock
                                         actionBlock:(void(^)(UIButton *button))actionBlock
                                      addActionBlock:(void(^)(NSInteger index))addActionBlock
-                                          fileBlock:(void(^)(NSDictionary *file))fileBlock;
+                                          fileBlock:(void(^)(NSDictionary *file))fileBlock
+                                         sendAction:(void(^)(NSString *value))sendBlock;
 
 @end

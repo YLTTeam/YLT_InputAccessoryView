@@ -404,6 +404,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-YLT_InputAccessoryView_Example/Pods-YLT_InputAccessoryView_Example-resources.sh",
 				"${PODS_ROOT}/TZImagePickerController/TZImagePickerController/TZImagePickerController/TZImagePickerController.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/YLT_Faceboard/YLT_Faceboard.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/YLT_InputAccessoryView/YLT_InputAccessoryView.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/YLT_RecordAudio/YLT_RecordAudio.bundle",
 			);
