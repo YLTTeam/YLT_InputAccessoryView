@@ -159,11 +159,13 @@
     self.configer.inputTextView.delegate = self;
     [YLT_RecordManager manager].delegate = self;
     [[[NSNotificationCenter defaultCenter] rac_addObserverForName:UIKeyboardWillChangeFrameNotification object:nil] subscribeNext:^(NSNotification * _Nullable x) {
+        @strongify(self);
         NSDictionary *userInfo = [x userInfo];
         [self keyboardUserInfo:userInfo];
     }];
     
     [[[NSNotificationCenter defaultCenter] rac_addObserverForName:UIKeyboardDidChangeFrameNotification object:nil] subscribeNext:^(NSNotification * _Nullable x) {
+        @strongify(self);
         NSDictionary *userInfo = [x userInfo];
         [self keyboardUserInfo:userInfo];
     }];
@@ -298,7 +300,7 @@
 
 /**
  键盘改变事件
-
+ 
  @param userInfo 参数
  */
 - (void)keyboardUserInfo:(NSDictionary *)userInfo {
@@ -315,7 +317,7 @@
     if ([self.configer.mainScrollView isKindOfClass:[UIScrollView class]]) {
         [self.configer.mainScrollView scrollRectToVisible:CGRectMake(0, self.configer.mainScrollView.contentSize.height-(YLT_SCREEN_HEIGHT-keyboardEndFrame.origin.y), YLT_SCREEN_WIDTH, YLT_SCREEN_HEIGHT-keyboardEndFrame.origin.y) animated:NO];
     }
-
+    
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:animationDuration];
     [UIView setAnimationCurve:animationCurve];
@@ -455,6 +457,7 @@
 
 - (YLT_AddInputView *)addInputView {
     if (!_addInputView) {
+        @weakify(self);
         _addInputView = [YLT_AddInputView showInputViewConfig:^(YLT_AddInputConfig *config) {
             [config.models addObject:[YLT_AddInputModel modelImage:YLT_AccessoryImage(@"mes_itempic") name:@"图片"]];
             [config.models addObject:[YLT_AddInputModel modelImage:YLT_AccessoryImage(@"mes_itemphoto") name:@"相机"]];
@@ -462,6 +465,7 @@
             [config.models addObject:[YLT_AddInputModel modelImage:YLT_AccessoryImage(@"mes_itemloc") name:@"语音"]];
             [config.models addObject:[YLT_AddInputModel modelImage:YLT_AccessoryImage(@"mes_friends") name:@"个人名片"]];
         } actionBlock:^(NSInteger index) {
+            @strongify(self);
             if (self.addActionBlock) {
                 self.addActionBlock(index);
             }
@@ -471,6 +475,7 @@
                         TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:9 delegate:nil];
                         // 你可以通过block或者代理，来得到用户选择的照片.
                         [imagePickerVc setDidFinishPickingPhotosHandle:^(NSArray<UIImage *> *photos, NSArray *assets, BOOL isSelectOriginalPhoto) {
+                            @strongify(self);
                             if (self.fileBlock) {
                                 self.fileBlock(@{@"type":@(PhotoType), @"data":photos});
                             }
@@ -487,6 +492,7 @@
                     [[YLT_AuthorizationHelper shareInstance] YLT_AuthorizationType:YLT_Camera success:^{
                         [YLT_PhotoHelper YLT_PhotoFromCameraAllowEdit:YES success:^(NSDictionary *info) {
                             UIImage *image = info[UIImagePickerControllerOriginalImage];
+                            @strongify(self);
                             self.fileBlock(@{@"type":@(PhotoType), @"data":@[image]});
                             [self.configer.inputTextView performSelector:@selector(becomeFirstResponder) withObject:nil afterDelay:0.2];
                         } failed:^(NSError *error) {
@@ -544,3 +550,4 @@
 
 
 @end
+

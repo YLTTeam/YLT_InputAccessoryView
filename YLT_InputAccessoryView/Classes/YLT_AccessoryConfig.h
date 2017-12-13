@@ -94,7 +94,7 @@
 /**
  上层视图
  */
-@property (nonatomic, strong) UIView *superView;
+@property (nonatomic, weak) UIView *superView;
 
 /**
  语音按钮
