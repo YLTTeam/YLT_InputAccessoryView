@@ -45,6 +45,8 @@
 
 @property (nonatomic, copy) void(^sendBlock)(NSString *value);
 
+@property (nonatomic, copy) void(^recordBlock)(YLT_RecordStatus status);
+
 @end
 
 @implementation YLT_AccessoryView
@@ -56,6 +58,7 @@
  @param textChangeBlock 文本修改的回调
  @param actionBlock 事件回调
  @param addActionBlock 事件回调
+ @param recordBlock 录音回调
  @param fileBlock 文件回调
  @param sendBlock 发送按钮的回调
  */
@@ -63,14 +66,16 @@
                                     textChangeBlock:(void(^)(NSString *text))textChangeBlock
                                         actionBlock:(void(^)(UIButton *button))actionBlock
                                      addActionBlock:(void(^)(NSInteger index))addActionBlock
+                                        recordBlock:(void(^)(YLT_RecordStatus status))recordBlock
                                           fileBlock:(void(^)(NSDictionary *file))fileBlock
-                                         sendAction:(void(^)(NSString *))sendBlock {
+                                         sendAction:(void(^)(NSString *value))sendBlock {
     YLT_AccessoryView *result = [[[self class] alloc] init];
     result.configer = [[YLT_AccessoryConfig alloc] init];
     !config?:config(result.configer);
     result.textChangeBlock = textChangeBlock;
     result.actionBlock = actionBlock;
     result.addActionBlock = addActionBlock;
+    result.recordBlock = recordBlock;
     result.fileBlock = fileBlock;
     result.sendBlock = sendBlock;
     [result show];
@@ -365,23 +370,29 @@
  * 音量变化
  */
 - (void)YLT_RecordVolumeChanged:(NSInteger)volume {
-    [YLT_RecordProgressHUD YLT_RecordVolumeChangeLevel:volume];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [YLT_RecordProgressHUD YLT_RecordVolumeChangeLevel:volume];
+    });
 }
 
 /**
  * 录音剩余时长
  */
 - (void)YLT_RecordTimeRemain:(NSInteger)remain {
-    [YLT_RecordProgressHUD YLT_RemainTime:remain];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [YLT_RecordProgressHUD YLT_RemainTime:remain];
+    });
 }
 
 /**
  * 录音完成
  */
 - (void)YLT_RecordCompleteWithData:(NSData *)recordData recordDuration:(NSInteger)recordDuration {
-    if (self.fileBlock) {
-        self.fileBlock(@{@"type":@(AudioType), @"data":recordData, @"duration":@(recordDuration)});
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.fileBlock) {
+            self.fileBlock(@{@"type":@(AudioType), @"data":recordData, @"duration":@(recordDuration)});
+        }
+    });
 }
 
 /**
@@ -437,14 +448,16 @@
             
             [[sendBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
                 @strongify(self);
-                if (self.sendBlock) {
-                    if (self.configer.inputTextView) {
-                        self.sendBlock(self.configer.inputTextView.text);
-                        self.configer.inputTextView.text = @"";
-                    } else {
-                        self.sendBlock(@"");
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (self.sendBlock) {
+                        if (self.configer.inputTextView) {
+                            self.sendBlock(self.configer.inputTextView.text);
+                            self.configer.inputTextView.text = @"";
+                        } else {
+                            self.sendBlock(@"");
+                        }
                     }
-                }
+                });
             }];
             
             config.faceAction = ^(YLT_FaceboardType faceboardType, YLT_FaceModel *faceModel) {
@@ -523,26 +536,51 @@
         _recordBtn.layer.borderColor = [@"999999" YLT_ColorFromHexString].CGColor;
         _recordBtn.layer.borderWidth = 0.5;
         [[_recordBtn rac_signalForControlEvents:UIControlEventTouchDown] subscribeNext:^(__kindof UIControl * _Nullable x) {
-            [[YLT_RecordManager manager] YLT_StartRecord];
-            [YLT_RecordProgressHUD YLT_Show];
+            if (self.recordBlock) {
+                self.recordBlock(YLT_RecordStatusRecording);
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [YLT_RecordProgressHUD YLT_Show];
+                [[YLT_RecordManager manager] YLT_StartRecord];
+            });
         }];
         
         [[_recordBtn rac_signalForControlEvents:UIControlEventTouchDragOutside] subscribeNext:^(__kindof UIControl * _Nullable x) {
-            [YLT_RecordProgressHUD YLT_RecordStatus:YLT_RecordStatusLooseToCancel];
+            if (self.recordBlock) {
+                self.recordBlock(YLT_RecordStatusCancel);
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [YLT_RecordProgressHUD YLT_RecordStatus:YLT_RecordStatusLooseToCancel];
+            });
         }];
         
         [[_recordBtn rac_signalForControlEvents:UIControlEventTouchDragInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
-            [YLT_RecordProgressHUD YLT_RecordStatus:YLT_RecordStatusRecording];
+            if (self.recordBlock) {
+                self.recordBlock(YLT_RecordStatusRecording);
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [YLT_RecordProgressHUD YLT_RecordStatus:YLT_RecordStatusRecording];
+            });
         }];
         
         [[_recordBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
-            [[YLT_RecordManager manager] YLT_CompleteRecord];
-            [YLT_RecordProgressHUD YLT_RecordStatus:YLT_RecordStatusSuccess];
+            if (self.recordBlock) {
+                self.recordBlock(YLT_RecordStatusSuccess);
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [YLT_RecordProgressHUD YLT_RecordStatus:YLT_RecordStatusSuccess];
+                [[YLT_RecordManager manager] YLT_CompleteRecord];
+            });
         }];
         
         [[_recordBtn rac_signalForControlEvents:UIControlEventTouchUpOutside] subscribeNext:^(__kindof UIControl * _Nullable x) {
-            [[YLT_RecordManager manager] YLT_CancelRecord];
-            [YLT_RecordProgressHUD YLT_RecordStatus:YLT_RecordStatusCancel];
+            if (self.recordBlock) {
+                self.recordBlock(YLT_RecordStatusCancel);
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[YLT_RecordManager manager] YLT_CancelRecord];
+                [YLT_RecordProgressHUD YLT_RecordStatus:YLT_RecordStatusCancel];
+            });
         }];
     }
     return _recordBtn;

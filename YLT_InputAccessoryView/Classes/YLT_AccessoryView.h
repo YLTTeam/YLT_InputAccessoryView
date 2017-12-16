@@ -7,6 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import "YLT_AccessoryConfig.h"
+#import "YLT_RecordProgressHUD.h"
 
 typedef NS_ENUM(NSUInteger, FileType) {
     AudioType,//音频
@@ -27,6 +28,7 @@ typedef NS_ENUM(NSUInteger, FileType) {
  @param textChangeBlock 文本修改的回调
  @param actionBlock 事件回调
  @param addActionBlock 事件回调
+ @param recordBlock 录音回调
  @param fileBlock 文件回调
  @param sendBlock 发送按钮的回调
  */
@@ -34,6 +36,7 @@ typedef NS_ENUM(NSUInteger, FileType) {
                                     textChangeBlock:(void(^)(NSString *text))textChangeBlock
                                         actionBlock:(void(^)(UIButton *button))actionBlock
                                      addActionBlock:(void(^)(NSInteger index))addActionBlock
+                                        recordBlock:(void(^)(YLT_RecordStatus status))recordBlock
                                           fileBlock:(void(^)(NSDictionary *file))fileBlock
                                          sendAction:(void(^)(NSString *value))sendBlock;
 
