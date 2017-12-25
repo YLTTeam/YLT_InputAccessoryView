@@ -1,0 +1,6 @@
+framework module Pods_YLT_InputAccessoryView_Tests {
+  umbrella header "Pods-YLT_InputAccessoryView_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}
