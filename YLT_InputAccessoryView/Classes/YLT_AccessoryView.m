@@ -586,6 +586,9 @@
     return _recordBtn;
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 @end
 
