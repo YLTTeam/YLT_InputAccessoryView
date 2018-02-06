@@ -541,6 +541,7 @@
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 [YLT_RecordProgressHUD YLT_Show];
+                [YLT_RecordManager manager].delegate = self;
                 [[YLT_RecordManager manager] YLT_StartRecord];
             });
         }];
