@@ -14,7 +14,7 @@
 #import <NSObject+YLT_BaseObject.h>
 #import <RMUniversalAlert/RMUniversalAlert.h>
 #import <YLT_Faceboard/YLT_Faceboard.h>
-
+#import <YLT_Kit/YLT_Kit.h>
 
 #define LEFT_SPACING 4
 #define RIGHT_SPACING 4
@@ -309,6 +309,9 @@
  @param userInfo 参数
  */
 - (void)keyboardUserInfo:(NSDictionary *)userInfo {
+    if (self.superview == nil) {
+        return;
+    }
     NSTimeInterval animationDuration;
     UIViewAnimationCurve animationCurve;
     CGRect keyboardEndFrame;
@@ -475,7 +478,7 @@
             [config.models addObject:[YLT_AddInputModel modelImage:YLT_AccessoryImage(@"mes_itempic") name:@"图片"]];
             [config.models addObject:[YLT_AddInputModel modelImage:YLT_AccessoryImage(@"mes_itemphoto") name:@"相机"]];
             [config.models addObject:[YLT_AddInputModel modelImage:YLT_AccessoryImage(@"mes_itemcall") name:@"语音"]];
-            [config.models addObject:[YLT_AddInputModel modelImage:YLT_AccessoryImage(@"mes_itemloc") name:@"语音"]];
+            [config.models addObject:[YLT_AddInputModel modelImage:YLT_AccessoryImage(@"mes_itemloc") name:@"地理位置"]];
             [config.models addObject:[YLT_AddInputModel modelImage:YLT_AccessoryImage(@"mes_friends") name:@"个人名片"]];
         } actionBlock:^(NSInteger index) {
             @strongify(self);
@@ -530,6 +533,9 @@
         _recordBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _recordBtn.backgroundColor = [UIColor whiteColor];
         [_recordBtn setTitle:@"按住 说话" forState:UIControlStateNormal];
+        [_recordBtn setTitle:@"松开 结束" forState:UIControlStateHighlighted];
+        [_recordBtn setBackgroundImage:[UIImage YLT_ImageFromColor:YLT_HEXCOLOR(0xfafafa)] forState:UIControlStateNormal];
+        [_recordBtn setBackgroundImage:[UIImage YLT_ImageFromColor:YLT_HEXCOLOR(0xeeeeee)] forState:UIControlStateHighlighted];
         _recordBtn.titleLabel.font = [UIFont boldSystemFontOfSize:14];
         [_recordBtn setTitleColor:[@"515151" YLT_ColorFromHexString] forState:UIControlStateNormal];
         _recordBtn.layer.cornerRadius = 3;
