@@ -15,6 +15,7 @@
 #import <RMUniversalAlert/RMUniversalAlert.h>
 #import <YLT_Faceboard/YLT_Faceboard.h>
 #import <YLT_Kit/YLT_Kit.h>
+#import <YLT_Kit/UIImage+YLT_Utils.h>
 
 #define LEFT_SPACING 4
 #define RIGHT_SPACING 4

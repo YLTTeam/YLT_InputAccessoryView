@@ -1,6 +1,6 @@
 {
   "name": "YLT_InputAccessoryView",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "summary": "A short description of YLT_InputAccessoryView.",
   "description": "TODO: Add long description of the pod here.",
   "homepage": "https://github.com/YLTTeam/YLT_InputAccessoryView",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/YLTTeam/YLT_InputAccessoryView.git",
-    "tag": "0.0.3"
+    "tag": "0.0.4"
   },
   "platforms": {
     "ios": "9.0"

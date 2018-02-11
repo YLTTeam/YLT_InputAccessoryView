@@ -44,7 +44,7 @@ PODS:
     - YLT_Kit
     - YYImage
     - YYText
-  - YLT_InputAccessoryView (0.0.3):
+  - YLT_InputAccessoryView (0.0.4):
     - Masonry
     - ReactiveObjC
     - RMUniversalAlert
@@ -54,7 +54,7 @@ PODS:
     - YLT_Faceboard
     - YLT_Kit
     - YLT_RecordAudio
-  - YLT_Kit (0.0.17):
+  - YLT_Kit (0.0.18):
     - AFNetworking
     - Masonry
     - ReactiveObjC (~> 3.0.0)
@@ -93,8 +93,8 @@ SPEC CHECKSUMS:
   UIAlertView+Blocks: a46c99c5144f6c5dbc7d62fd2a0678daceec89a3
   YLT_BaseLib: 56baf52cd4c902876a08949e38f7b93ff04a6a34
   YLT_Faceboard: be9cbf11134349bec725d681d7741f3665883dbb
-  YLT_InputAccessoryView: d21e19751df5a2fadb8d16eb3bc5c07ed773de60
-  YLT_Kit: a701c429756f5478904b1ce3c7187870d8f55428
+  YLT_InputAccessoryView: 09cd2c2fd7ab7afa7e596df3c5a75dda10ffa7fb
+  YLT_Kit: 1f5d5907aa2b1147b4d390817801a50697ccb09c
   YLT_RecordAudio: 44c983a5600662695877f8e15878e4270977db78
   YYImage: 1e1b62a9997399593e4b9c4ecfbbabbf1d3f3b54
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
