@@ -86,7 +86,8 @@
     if (self.configer.superView) {
         [self.configer.superView addSubview:self];
         [self mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.bottom.equalTo(self.configer.superView);
+            make.left.right.equalTo(self.configer.superView);
+            make.bottom.equalTo(self.configer.superView).offset(-HOME_INDICATOR_HEIGHT);
         }];
     }
     self.configer.maxHeight = (self.configer.maxHeight>self.configer.height)?self.configer.maxHeight:self.configer.height;
