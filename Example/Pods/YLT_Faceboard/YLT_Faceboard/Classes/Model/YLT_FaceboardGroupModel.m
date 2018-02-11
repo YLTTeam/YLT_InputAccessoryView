@@ -75,7 +75,7 @@
 
 - (NSUInteger)countPreRow {
     if (_countPreRow == 0) {
-        _countPreRow = iPhone_4_7?7:((iPhone_5_5||iPhone_x)?8:6);
+        _countPreRow = iPhone6?7:((iPhone6P||iPhoneX)?8:6);
     }
     return _countPreRow;
 }
