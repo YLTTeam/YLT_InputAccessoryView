@@ -11,11 +11,9 @@
 #import <YLT_RecordAudio/YLT_RecordAudio.h>
 #import "YLT_AddInputView.h"
 #import <TZImagePickerController/TZImagePickerController.h>
-#import <NSObject+YLT_BaseObject.h>
 #import <RMUniversalAlert/RMUniversalAlert.h>
 #import <YLT_Faceboard/YLT_Faceboard.h>
 #import <YLT_Kit/YLT_Kit.h>
-#import <YLT_Kit/UIImage+YLT_Utils.h>
 
 #define LEFT_SPACING 4
 #define RIGHT_SPACING 4
@@ -206,7 +204,7 @@
             if (sender.selected) {
                 @weakify(sender);
                 @weakify(self);
-                [[YLT_AuthorizationHelper shareInstance] YLT_AuthorizationType:YLT_Microphone success:^{
+                [[YLT_AuthorizationHelper shareInstance] ylt_authorizationType:YLT_Microphone success:^{
                     @strongify(self);
                     self.configer.inputTextView.inputView = nil;
                     [self.configer.inputTextView resignFirstResponder];
@@ -224,7 +222,7 @@
                 } failed:^{
                     @strongify(sender);
                     sender.selected = NO;
-                    [RMUniversalAlert showAlertInViewController:self.YLT_CurrentVC withTitle:@"提示" message:[NSString stringWithFormat:@"请在iPhone的“设置-隐私-麦克风”选项中，允许%@访问你的麦克风", YLT_AppName] cancelButtonTitle:@"我知道了" destructiveButtonTitle:nil otherButtonTitles:nil tapBlock:^(RMUniversalAlert * _Nonnull alert, NSInteger buttonIndex) {
+                    [RMUniversalAlert showAlertInViewController:self.ylt_currentVC withTitle:@"提示" message:[NSString stringWithFormat:@"请在iPhone的“设置-隐私-麦克风”选项中，允许%@访问你的麦克风", YLT_AppName] cancelButtonTitle:@"我知道了" destructiveButtonTitle:nil otherButtonTitles:nil tapBlock:^(RMUniversalAlert * _Nonnull alert, NSInteger buttonIndex) {
                     }];
                 }];
             } else {
@@ -360,7 +358,7 @@
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     if ([text isEqualToString:@"\n"]) {
-        if ([textView.text YLT_CheckString]) {
+        if (textView.text.ylt_isValid) {
             return NO;
         }
         
@@ -404,7 +402,7 @@
  * 录音失败
  */
 - (void)YLT_RecordFail {
-    [RMUniversalAlert showAlertInViewController:self.YLT_CurrentVC withTitle:@"提示" message:@"录制失败" cancelButtonTitle:@"好的" destructiveButtonTitle:nil otherButtonTitles:nil tapBlock:nil];
+    [RMUniversalAlert showAlertInViewController:self.ylt_currentVC withTitle:@"提示" message:@"录制失败" cancelButtonTitle:@"好的" destructiveButtonTitle:nil otherButtonTitles:nil tapBlock:nil];
 }
 
 /**
@@ -489,7 +487,7 @@
             }
             switch (index) {
                 case 0: {//相册
-                    [[YLT_AuthorizationHelper shareInstance] YLT_AuthorizationType:YLT_PhotoLibrary success:^{
+                    [[YLT_AuthorizationHelper shareInstance] ylt_authorizationType:YLT_PhotoLibrary success:^{
                         TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:9 delegate:nil];
                         // 你可以通过block或者代理，来得到用户选择的照片.
                         [imagePickerVc setDidFinishPickingPhotosHandle:^(NSArray<UIImage *> *photos, NSArray *assets, BOOL isSelectOriginalPhoto) {
@@ -499,16 +497,16 @@
                             }
                             [self.configer.inputTextView performSelector:@selector(becomeFirstResponder) withObject:nil afterDelay:0.2];
                         }];
-                        [self.YLT_CurrentVC presentViewController:imagePickerVc animated:YES completion:nil];
+                        [self.ylt_currentVC presentViewController:imagePickerVc animated:YES completion:nil];
                     } failed:^{
-                        [RMUniversalAlert showAlertInViewController:self.YLT_CurrentVC withTitle:@"提示" message:[NSString stringWithFormat:@"请在iPhone的“设置-隐私-照片”选项中，允许%@访问你的照片", YLT_AppName] cancelButtonTitle:@"我知道了" destructiveButtonTitle:nil otherButtonTitles:nil tapBlock:^(RMUniversalAlert * _Nonnull alert, NSInteger buttonIndex) {
+                        [RMUniversalAlert showAlertInViewController:self.ylt_currentVC withTitle:@"提示" message:[NSString stringWithFormat:@"请在iPhone的“设置-隐私-照片”选项中，允许%@访问你的照片", YLT_AppName] cancelButtonTitle:@"我知道了" destructiveButtonTitle:nil otherButtonTitles:nil tapBlock:^(RMUniversalAlert * _Nonnull alert, NSInteger buttonIndex) {
                         }];
                     }];
                 }
                     break;
                 case 1: {//相机
-                    [[YLT_AuthorizationHelper shareInstance] YLT_AuthorizationType:YLT_Camera success:^{
-                        [YLT_PhotoHelper YLT_PhotoFromCameraAllowEdit:YES success:^(NSDictionary *info) {
+                    [[YLT_AuthorizationHelper shareInstance] ylt_authorizationType:YLT_Camera success:^{
+                        [YLT_PhotoHelper ylt_photoFromCameraAllowEdit:YES success:^(NSDictionary *info) {
                             UIImage *image = info[UIImagePickerControllerOriginalImage];
                             @strongify(self);
                             self.fileBlock(@{@"type":@(PhotoType), @"data":@[image]});
@@ -516,7 +514,7 @@
                         } failed:^(NSError *error) {
                         }];
                     } failed:^{
-                        [RMUniversalAlert showAlertInViewController:self.YLT_CurrentVC withTitle:@"提示" message:[NSString stringWithFormat:@"请在iPhone的“设置-隐私-相机”选项中，允许%@访问你的相机", YLT_AppName] cancelButtonTitle:@"我知道了" destructiveButtonTitle:nil otherButtonTitles:nil tapBlock:^(RMUniversalAlert * _Nonnull alert, NSInteger buttonIndex) {
+                        [RMUniversalAlert showAlertInViewController:self.ylt_currentVC withTitle:@"提示" message:[NSString stringWithFormat:@"请在iPhone的“设置-隐私-相机”选项中，允许%@访问你的相机", YLT_AppName] cancelButtonTitle:@"我知道了" destructiveButtonTitle:nil otherButtonTitles:nil tapBlock:^(RMUniversalAlert * _Nonnull alert, NSInteger buttonIndex) {
                         }];
                     }];
                 }
@@ -536,12 +534,12 @@
         _recordBtn.backgroundColor = [UIColor whiteColor];
         [_recordBtn setTitle:@"按住 说话" forState:UIControlStateNormal];
         [_recordBtn setTitle:@"松开 结束" forState:UIControlStateHighlighted];
-        [_recordBtn setBackgroundImage:[UIImage YLT_ImageFromColor:YLT_HEXCOLOR(0xfafafa)] forState:UIControlStateNormal];
-        [_recordBtn setBackgroundImage:[UIImage YLT_ImageFromColor:YLT_HEXCOLOR(0xeeeeee)] forState:UIControlStateHighlighted];
+        [_recordBtn setBackgroundImage:[UIImage ylt_imageWithColor:YLT_HEXCOLOR(0xfafafa)] forState:UIControlStateNormal];
+        [_recordBtn setBackgroundImage:[UIImage ylt_imageWithColor:YLT_HEXCOLOR(0xeeeeee)] forState:UIControlStateHighlighted];
         _recordBtn.titleLabel.font = [UIFont boldSystemFontOfSize:14];
-        [_recordBtn setTitleColor:[@"515151" YLT_ColorFromHexString] forState:UIControlStateNormal];
+        [_recordBtn setTitleColor:[@"515151" ylt_colorFromHexString] forState:UIControlStateNormal];
         _recordBtn.layer.cornerRadius = 3;
-        _recordBtn.layer.borderColor = [@"999999" YLT_ColorFromHexString].CGColor;
+        _recordBtn.layer.borderColor = [@"999999" ylt_colorFromHexString].CGColor;
         _recordBtn.layer.borderWidth = 0.5;
         [[_recordBtn rac_signalForControlEvents:UIControlEventTouchDown] subscribeNext:^(__kindof UIControl * _Nullable x) {
             if (self.recordBlock) {

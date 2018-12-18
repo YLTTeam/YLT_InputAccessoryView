@@ -26,7 +26,7 @@
     self = [super init];
     if (self) {
         _height = 216;
-        _bgColor = [@"fafafa" YLT_ColorFromHexString];
+        _bgColor = [@"fafafa" ylt_colorFromHexString];
         _models = [[NSMutableArray alloc] init];
     }
     return self;

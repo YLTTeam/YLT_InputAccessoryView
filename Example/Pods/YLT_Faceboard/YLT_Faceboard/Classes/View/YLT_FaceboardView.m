@@ -143,7 +143,7 @@
             YLT_FaceModel *model = (YLT_FaceModel *)[self.configer.keyboards[indexPath.section].faces objectAtIndex:indexPath.row];
             if (!model.isEmpty) {
                 UITextField *textField = ((UITextField *) self.configer.inputView);
-                NSInteger location = textField.selectedRange.location;
+                NSInteger location = textField.ylt_selectedRange.location;
                 if (model.isDelete) {//删除事件
                     if (location > 0) {
                         //匹配光标位置往前的字符串
@@ -164,12 +164,12 @@
                         }
                         front = isEmoji?front:[front substringToIndex:front.length-1];
                         textField.text = [NSString stringWithFormat:@"%@%@", front, back];
-                        textField.selectedRange = NSMakeRange(front.length, 0);
+                        textField.ylt_selectedRange = NSMakeRange(front.length, 0);
                     }
                 } else {//添加表情事件
                     if (self.configer.keyboards[indexPath.section].faceboardType==YLT_FaceboardType_Emoji) {
                         textField.text = [NSString stringWithFormat:@"%@%@%@", [textField.text substringToIndex:location], model.faceName, [textField.text substringFromIndex:location]];
-                        textField.selectedRange = NSMakeRange(location+model.faceName.length, 0);
+                        textField.ylt_selectedRange = NSMakeRange(location+model.faceName.length, 0);
                     }
                 }
                 self.configer.faceAction(self.configer.keyboards[indexPath.section].faceboardType, model);
@@ -285,8 +285,8 @@
     if (!_pageControl) {
         @weakify(self);
         _pageControl = [[UIPageControl alloc] init];
-        _pageControl.pageIndicatorTintColor = [@"dddddd" YLT_ColorFromHexString];
-        _pageControl.currentPageIndicatorTintColor = [@"999999" YLT_ColorFromHexString];
+        _pageControl.pageIndicatorTintColor = [@"dddddd" ylt_colorFromHexString];
+        _pageControl.currentPageIndicatorTintColor = [@"999999" ylt_colorFromHexString];
         [_contentView addSubview:self.pageControl];
         [_pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.bottom.equalTo(self.contentView);
@@ -313,9 +313,9 @@
         self.flowLayout.itemSize = CGSizeMake(self.contentView.bounds.size.width/self.configer.currentKeyboardGroupModel.countPreRow, (self.contentView.bounds.size.height-self.pageControl.bounds.size.height)/self.configer.currentKeyboardGroupModel.row);
         NSMutableArray *configs = [[NSMutableArray alloc] init];
         [self.configer.keyboards enumerateObjectsUsingBlock:^(YLT_FaceboardGroupModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [configs addObject:[YLT_HorizontalFlowLayoutModel modelWithPreRow:obj.countPreRow row:obj.row]];
+            [configs addObject:[YLT_HorizontalFlowLayoutModel ylt_modelWithPreRow:obj.countPreRow row:obj.row]];
         }];
-        self.flowLayout.sectionConfigs = configs;
+        self.flowLayout.ylt_sectionConfigs = configs;
         self.flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         _faceCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:self.flowLayout];
         _faceCollectionView.showsHorizontalScrollIndicator = NO;

@@ -20,9 +20,9 @@
     if (self) {
         _keyboardType = UIKeyboardTypeDefault;
         _returnKeyType = UIReturnKeyDefault;
-        _backgroundColor = [@"FAFAFA" YLT_ColorFromHexString];
-        _borderColor = [@"CCCCCC" YLT_ColorFromHexString];
-        _lineColor = [@"CCCCCC" YLT_ColorFromHexString];
+        _backgroundColor = [@"FAFAFA" ylt_colorFromHexString];
+        _borderColor = [@"CCCCCC" ylt_colorFromHexString];
+        _lineColor = [@"CCCCCC" ylt_colorFromHexString];
         _leftBtns = @[];
         _rightBtns = @[];
         _contentView = [[UIView alloc] init];
@@ -33,7 +33,7 @@
         _maxHeight = 140;
         _placeholder = @"请输入...";
         _font = [UIFont systemFontOfSize:16];
-        _textColor = [@"515151" YLT_ColorFromHexString];
+        _textColor = [@"515151" ylt_colorFromHexString];
     }
     return self;
 }

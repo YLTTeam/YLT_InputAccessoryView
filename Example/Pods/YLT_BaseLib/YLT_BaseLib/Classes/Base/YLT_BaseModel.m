@@ -9,7 +9,7 @@
 #import <MJExtension/MJExtension.h>
 #import "YLT_BaseMacro.h"
 #import <objc/message.h>
-#import "NSString+YLT_BaseString.h"
+#import "NSString+YLT_Extension.h"
 
 #define OBJECT_MEMORY_KEY [NSString stringWithFormat:@"YLT_OBJECT_SYSTEM_%@_%@", YLT_BundleIdentifier, NSStringFromClass([self class])]
 #define GROUP_MEMORY_KEY [NSString stringWithFormat:@"YLT_GROUP_SYSTEM_%@_%@", YLT_BundleIdentifier, NSStringFromClass([self class])]
@@ -21,28 +21,41 @@
     return [[self class] mj_objectWithKeyValues:self.mj_keyValues];
 }
 
+/**
+ 字典转模型
+ 
+ @param data 字典
+ @return 模型
+ */
++ (instancetype)ylt_objectWithKeyValues:(id)data {
+    YLT_BaseModel *res = [self mj_objectWithKeyValues:data];
+    res.ylt_sourceData = data;
+    return res;
+}
+
 #pragma mark - ORM
+
 /**
  返回当前ORM映射
  */
-+ (NSDictionary *)YLT_KeyMapper {
++ (NSDictionary *)ylt_keyMapper {
     return @{};
 }
 
 /**
  返回数据中Model的映射
  */
-+ (NSDictionary *)YLT_ClassInArray {
++ (NSDictionary *)ylt_classInArray {
     return @{};
 }
 
 #pragma mark - MJMethod
 + (NSDictionary *)mj_replacedKeyFromPropertyName {
-    return [[self class] YLT_KeyMapper];
+    return [[self class] ylt_keyMapper];
 }
 
 + (NSDictionary *)mj_objectClassInArray {
-    return [[self class] YLT_ClassInArray];
+    return [[self class] ylt_classInArray];
 }
 
 /**
@@ -50,8 +63,8 @@
  
  @return 存储结果
  */
-- (BOOL)save {
-    return [self saveForKey:OBJECT_MEMORY_KEY];
+- (BOOL)ylt_save {
+    return [self ylt_saveForKey:OBJECT_MEMORY_KEY];
 }
 
 /**
@@ -60,7 +73,16 @@
  @param key 存储的KEY
  @return 存储结果
  */
-- (BOOL)saveForKey:(NSString *)key {
+- (BOOL)ylt_saveForKey:(NSString *)key {
+    if ([NSString ylt_isBlankString:key]) {
+        YLT_LogWarn(@"KEY 不能为空");
+        return NO;
+    }
+    if (self == nil || ![self respondsToSelector:@selector(mj_keyValues)]) {
+        YLT_LogWarn(@"对象数据异常");
+        return NO;
+    }
+    
     NSDictionary *data = self.mj_keyValues;
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:key];
     return [[NSUserDefaults standardUserDefaults] synchronize];
@@ -71,8 +93,8 @@
  
  @return 对象
  */
-+ (id)read {
-    return [self readForKey:OBJECT_MEMORY_KEY];
++ (id)ylt_read {
+    return [self ylt_readForKey:OBJECT_MEMORY_KEY];
 }
 
 /**
@@ -81,11 +103,15 @@
  @param key 存储的KEY
  @return 对象
  */
-+ (id)readForKey:(NSString *)key {
-    if ([key YLT_CheckString]) {
++ (id)ylt_readForKey:(NSString *)key {
+    if ([key ylt_isValid]) {
         NSDictionary *data = nil;
         if ([[[NSUserDefaults standardUserDefaults] dictionaryRepresentation].allKeys containsObject:key]) {
             data = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+        }
+        if (![[self class] respondsToSelector:@selector(mj_objectWithKeyValues:)] || ![data isKindOfClass:[NSDictionary class]]) {
+            YLT_LogWarn(@"对象异常");
+            return nil;
         }
         id result = nil;
         if (data) {
@@ -102,14 +128,13 @@
     return nil;
 }
 
-
 /**
  读取数据到当前对象
  
  @return 读取结果
  */
-- (BOOL)read {
-    return [self readForKey:OBJECT_MEMORY_KEY];
+- (BOOL)ylt_read {
+    return [self ylt_readForKey:OBJECT_MEMORY_KEY];
 }
 
 /**
@@ -118,13 +143,18 @@
  @param key 存储的KEY
  @return 结果
  */
-- (BOOL)readForKey:(NSString *)key {
-    if ([key YLT_CheckString]) {
+- (BOOL)ylt_readForKey:(NSString *)key {
+    if ([key ylt_isValid]) {
         NSDictionary *data = nil;
         if ([[[NSUserDefaults standardUserDefaults] dictionaryRepresentation].allKeys containsObject:key]) {
             data = [[NSUserDefaults standardUserDefaults] objectForKey:key];
         }
         if (data) {
+            if (![self respondsToSelector:@selector(mj_setKeyValues:)] || ![data isKindOfClass:[NSDictionary class]]) {
+                YLT_LogWarn(@"对象异常");
+                return NO;
+            }
+            
             @try {
                 [self mj_setKeyValues:data];
             } @catch (NSException *exception) {
@@ -143,8 +173,8 @@
  
  @return 结果
  */
-- (BOOL)remove {
-    return [[self class] removeForKey:OBJECT_MEMORY_KEY];
+- (BOOL)ylt_remove {
+    return [[self class] ylt_removeForKey:OBJECT_MEMORY_KEY];
 }
 
 /**
@@ -153,7 +183,11 @@
  @param key 存储的KEY
  @return 结果
  */
-+ (BOOL)removeForKey:(NSString *)key {
++ (BOOL)ylt_removeForKey:(NSString *)key {
+    if ([NSString ylt_isBlankString:key]) {
+        YLT_LogWarn(@"KEY 不能为空");
+        return NO;
+    }
     if ([[[NSUserDefaults standardUserDefaults] dictionaryRepresentation].allKeys containsObject:key]) {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
         return [[NSUserDefaults standardUserDefaults] synchronize];
@@ -166,8 +200,8 @@
  
  @return 存储结果
  */
-- (BOOL)saveToGroup {
-    return [self saveToGroupForKey:GROUP_MEMORY_KEY];
+- (BOOL)ylt_saveToGroup {
+    return [self ylt_saveToGroupForKey:GROUP_MEMORY_KEY];
 }
 
 /**
@@ -176,7 +210,15 @@
  @param key 自定义的KEY
  @return 存储结果
  */
-- (BOOL)saveToGroupForKey:(NSString *)key {
+- (BOOL)ylt_saveToGroupForKey:(NSString *)key {
+    if ([NSString ylt_isBlankString:key]) {
+        YLT_LogWarn(@"KEY 不能为空");
+        return NO;
+    }
+    if (![self respondsToSelector:@selector(mj_keyValues)]) {
+        YLT_LogWarn(@"对象异常");
+        return NO;
+    }
     NSMutableArray *list = [[NSMutableArray alloc] init];
     if ([[NSUserDefaults standardUserDefaults] objectForKey:key] && [[[NSUserDefaults standardUserDefaults] objectForKey:key] isKindOfClass:[NSArray class]]) {
         [list addObjectsFromArray:[[NSUserDefaults standardUserDefaults] objectForKey:key]];
@@ -191,8 +233,8 @@
  
  @return 数据
  */
-+ (NSArray *)readFromGroup {
-    return [self readFromGroupForKey:GROUP_MEMORY_KEY];
++ (NSArray *)ylt_readFromGroup {
+    return [self ylt_readFromGroupForKey:GROUP_MEMORY_KEY];
 }
 
 /**
@@ -201,20 +243,23 @@
  @param key 自定义的KEY
  @return 数据
  */
-+ (NSArray *)readFromGroupForKey:(NSString *)key {
++ (NSArray *)ylt_readFromGroupForKey:(NSString *)key {
+    if ([NSString ylt_isBlankString:key]) {
+        YLT_LogWarn(@"KEY 不能为空");
+        return NO;
+    }
     if ([[NSUserDefaults standardUserDefaults] objectForKey:key] && [[[NSUserDefaults standardUserDefaults] objectForKey:key] isKindOfClass:[NSArray class]]) {
         return [[NSUserDefaults standardUserDefaults] objectForKey:key];
     }
     return @[];
 }
 
-
 /**
  移除所有的当前Model的对象
  
  @return 移除结果
  */
-+ (BOOL)removeAll {
++ (BOOL)ylt_removeAll {
     NSDictionary *defaults = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
     for (NSString *key in defaults.allKeys) {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
@@ -222,6 +267,13 @@
     return [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+#pragma mark - setter getter
 
+//- (id)ylt_sourceData {
+//    if (!_ylt_sourceData) {
+//        _ylt_sourceData = self.mj_keyValues;
+//    }
+//    return _ylt_sourceData;
+//}
 
 @end

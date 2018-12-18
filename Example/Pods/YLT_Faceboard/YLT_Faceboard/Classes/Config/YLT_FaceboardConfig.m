@@ -19,7 +19,7 @@
         _rightBtns = [[NSMutableArray alloc] init];
         _faceboardBtns = [[NSMutableArray alloc] init];
         _keyboards = [[NSMutableArray alloc] init];
-        _bgColor = [@"fafafa" YLT_ColorFromHexString];
+        _bgColor = [@"fafafa" ylt_colorFromHexString];
     }
     return self;
 }

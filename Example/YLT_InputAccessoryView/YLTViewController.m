@@ -44,6 +44,8 @@
         NSLog(@"%@", button);
     } addActionBlock:^(NSInteger index) {
         NSLog(@"添加事件的回调");
+    } recordBlock:^(YLT_RecordStatus status) {
+        
     } fileBlock:^(NSDictionary *files) {
         NSLog(@"%@", files);
         self.files = files;

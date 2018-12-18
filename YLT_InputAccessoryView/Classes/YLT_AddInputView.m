@@ -112,7 +112,7 @@
         }];
         
         _nameLabel = [[UILabel alloc] init];
-        _nameLabel.textColor = [@"515151" YLT_ColorFromHexString];
+        _nameLabel.textColor = [@"515151" ylt_colorFromHexString];
         _nameLabel.font = [UIFont systemFontOfSize:14];
         _nameLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:_nameLabel];

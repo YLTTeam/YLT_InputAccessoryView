@@ -1,44 +1,48 @@
 PODS:
-  - AFNetworking (3.2.0):
-    - AFNetworking/NSURLSession (= 3.2.0)
-    - AFNetworking/Reachability (= 3.2.0)
-    - AFNetworking/Security (= 3.2.0)
-    - AFNetworking/Serialization (= 3.2.0)
-    - AFNetworking/UIKit (= 3.2.0)
-  - AFNetworking/NSURLSession (3.2.0):
+  - AFNetworking (3.2.1):
+    - AFNetworking/NSURLSession (= 3.2.1)
+    - AFNetworking/Reachability (= 3.2.1)
+    - AFNetworking/Security (= 3.2.1)
+    - AFNetworking/Serialization (= 3.2.1)
+    - AFNetworking/UIKit (= 3.2.1)
+  - AFNetworking/NSURLSession (3.2.1):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/Reachability (3.2.0)
-  - AFNetworking/Security (3.2.0)
-  - AFNetworking/Serialization (3.2.0)
-  - AFNetworking/UIKit (3.2.0):
+  - AFNetworking/Reachability (3.2.1)
+  - AFNetworking/Security (3.2.1)
+  - AFNetworking/Serialization (3.2.1)
+  - AFNetworking/UIKit (3.2.1):
     - AFNetworking/NSURLSession
-  - FMDB (2.7.2):
-    - FMDB/standard (= 2.7.2)
-  - FMDB/standard (2.7.2)
+  - Aspects (1.4.1)
+  - FastCoding (3.3)
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
   - libmp3lame (3.99.5)
   - Masonry (1.1.0)
-  - MJExtension (3.0.13)
-  - ReactiveObjC (3.0.0)
+  - MJExtension (3.0.15.1)
+  - MJRefresh (3.1.15.7)
+  - ReactiveObjC (3.1.0)
   - RMUniversalAlert (0.8.1):
     - RMUniversalAlert/Core (= 0.8.1)
   - RMUniversalAlert/Core (0.8.1):
-    - UIActionSheet+Blocks (>= 0.9)
-    - UIAlertController+Blocks (>= 0.9)
-    - UIAlertView+Blocks (>= 0.9)
-  - SDWebImage (4.3.0):
-    - SDWebImage/Core (= 4.3.0)
-  - SDWebImage/Core (4.3.0)
+    - "UIActionSheet+Blocks (>= 0.9)"
+    - "UIAlertController+Blocks (>= 0.9)"
+    - "UIAlertView+Blocks (>= 0.9)"
+  - SDWebImage (4.4.3):
+    - SDWebImage/Core (= 4.4.3)
+  - SDWebImage/Core (4.4.3)
   - SZTextView (1.3.0)
-  - TZImagePickerController (2.0.0.5)
-  - UIActionSheet+Blocks (0.9)
-  - UIAlertController+Blocks (0.9.2)
-  - UIAlertView+Blocks (0.9)
-  - YLT_BaseLib (0.0.35):
+  - TZImagePickerController (3.1.5)
+  - "UIActionSheet+Blocks (0.9)"
+  - "UIAlertController+Blocks (0.9.2)"
+  - "UIAlertView+Blocks (0.9)"
+  - YLT_BaseLib (0.3.10):
+    - FastCoding
     - FMDB
-    - MJExtension (~> 3.0.13)
-  - YLT_Faceboard (0.0.2):
+    - MJExtension
+  - YLT_Faceboard (0.0.3):
     - Masonry
     - YLT_BaseLib
     - YLT_Kit
@@ -54,10 +58,12 @@ PODS:
     - YLT_Faceboard
     - YLT_Kit
     - YLT_RecordAudio
-  - YLT_Kit (0.0.18):
+  - YLT_Kit (0.3.6):
     - AFNetworking
+    - Aspects
     - Masonry
-    - ReactiveObjC (~> 3.0.0)
+    - MJRefresh
+    - ReactiveObjC
     - SDWebImage
     - YLT_BaseLib
   - YLT_RecordAudio (0.0.2):
@@ -73,32 +79,60 @@ DEPENDENCIES:
   - YLT_InputAccessoryView (from `../`)
   - YLT_RecordAudio
 
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - AFNetworking
+    - Aspects
+    - FastCoding
+    - FMDB
+    - libmp3lame
+    - Masonry
+    - MJExtension
+    - MJRefresh
+    - ReactiveObjC
+    - RMUniversalAlert
+    - SDWebImage
+    - SZTextView
+    - TZImagePickerController
+    - "UIActionSheet+Blocks"
+    - "UIAlertController+Blocks"
+    - "UIAlertView+Blocks"
+    - YLT_BaseLib
+    - YLT_Faceboard
+    - YLT_Kit
+    - YLT_RecordAudio
+    - YYImage
+    - YYText
+
 EXTERNAL SOURCES:
   YLT_InputAccessoryView:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
-  AFNetworking: 8ac6017b94ea105479f7776e5288e48ae9c59bb4
-  FMDB: 6198a90e7b6900cfc046e6bc0ef6ebb7be9236aa
+  AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
+  Aspects: 7595ba96a6727a58ebcbfc954497fc5d2fdde546
+  FastCoding: 3b590f7143a229780fa744b35084d85d9461587e
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   libmp3lame: 1f867bc673ffd466fa206a18998c331b8342899a
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MJExtension: 5932755f451458eefa24239358817f8d291240c7
-  ReactiveObjC: ce79989e8684b9086b5f8d0c74bc7b81a8729c9e
+  MJExtension: 19bc33ce2eee2d319760f5622562cf581a6ff756
+  MJRefresh: 697f8ec75ebdbe9207767bb682cf0f51b0d8a41f
+  ReactiveObjC: 2a38ea15335de4119d8b17caf1db1484f61db902
   RMUniversalAlert: ce7118101a19fa41b9adedf907b66a8cc3bd32c8
-  SDWebImage: 6da6c8bca115addc4de8613362e1b15f66333825
+  SDWebImage: c5594f1a19c48d526d321e548902b56b479cd508
   SZTextView: 094dc6acc9beec537685c545d6e3e0d4975174e1
-  TZImagePickerController: d5d2fa1a8e4d93ab0ada161db5beba60b2294d99
-  UIActionSheet+Blocks: e180b7dad0a721ab7f212ac9742af799008bb358
-  UIAlertController+Blocks: 80e28b92523fb58aba4d1bccec013d5a0b0bddb2
-  UIAlertView+Blocks: a46c99c5144f6c5dbc7d62fd2a0678daceec89a3
-  YLT_BaseLib: 56baf52cd4c902876a08949e38f7b93ff04a6a34
-  YLT_Faceboard: be9cbf11134349bec725d681d7741f3665883dbb
-  YLT_InputAccessoryView: 09cd2c2fd7ab7afa7e596df3c5a75dda10ffa7fb
-  YLT_Kit: 1f5d5907aa2b1147b4d390817801a50697ccb09c
+  TZImagePickerController: 6cc6e9c1a73bb8e62cfef98fd40af2d90634dcf5
+  "UIActionSheet+Blocks": e180b7dad0a721ab7f212ac9742af799008bb358
+  "UIAlertController+Blocks": 80e28b92523fb58aba4d1bccec013d5a0b0bddb2
+  "UIAlertView+Blocks": a46c99c5144f6c5dbc7d62fd2a0678daceec89a3
+  YLT_BaseLib: 144c9b1982e67f8c73bf2533b53662e8dafec42a
+  YLT_Faceboard: a909da5d28f0bb16e43f525462ad9ef49cd16fe0
+  YLT_InputAccessoryView: 961b3cd344638d056fcb5a0ebcffab6f05d8a80b
+  YLT_Kit: 31039219864ed23df1bf96dbeaaa5422785a698a
   YLT_RecordAudio: 44c983a5600662695877f8e15878e4270977db78
   YYImage: 1e1b62a9997399593e4b9c4ecfbbabbf1d3f3b54
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
 
 PODFILE CHECKSUM: 1e41a472f845e286487b6b26687cd757069b080d
 
-COCOAPODS: 1.4.0.rc.1
+COCOAPODS: 1.5.3
