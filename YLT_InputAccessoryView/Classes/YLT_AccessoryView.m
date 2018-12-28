@@ -142,18 +142,26 @@
         make.top.equalTo(@4);
         make.bottom.equalTo(@(-4));
     }];
-    [self.configer.contentView addSubview:self.configer.inputTextView];
-    self.configer.inputTextView.layer.borderColor = self.configer.borderColor.CGColor;
-    self.configer.inputTextView.layer.borderWidth = 0.5;
-    self.configer.inputTextView.layer.cornerRadius = 3;
-    self.configer.inputTextView.placeholder = self.configer.placeholder;
-    self.configer.inputTextView.textColor = self.configer.textColor;
-    self.configer.inputTextView.font = self.configer.font;
-    [self.configer.inputTextView mas_makeConstraints:^(MASConstraintMaker *make) {
+    UIImageView *borderImageView = [[UIImageView alloc] init];
+    borderImageView.layer.borderColor = self.configer.borderColor.CGColor;
+    borderImageView.layer.borderWidth = self.configer.borderWidth;
+    borderImageView.layer.cornerRadius = self.configer.cornerRadius;
+    borderImageView.backgroundColor = UIColor.whiteColor;
+    [self.configer.contentView addSubview:borderImageView];
+    [borderImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.configer.contentView).offset(8);
         make.right.equalTo(self.configer.contentView).offset(-8);
         make.top.equalTo(self.configer.contentView).offset(4);
         make.bottom.equalTo(self.configer.contentView).offset(-4);
+    }];
+    
+    [self.configer.contentView addSubview:self.configer.inputTextView];
+    self.configer.inputTextView.placeholder = self.configer.placeholder;
+    self.configer.inputTextView.textColor = self.configer.textColor;
+    self.configer.inputTextView.font = self.configer.font;
+    self.configer.inputTextView.backgroundColor = UIColor.clearColor;
+    [self.configer.inputTextView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(borderImageView);
     }];
     [[self.configer.inputTextView rac_textSignal] subscribeNext:^(NSString * _Nullable x) {
         @strongify(self);

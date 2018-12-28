@@ -32,7 +32,7 @@
         _height = 49;
         _maxHeight = 140;
         _placeholder = @"请输入...";
-        _font = [UIFont systemFontOfSize:16];
+        _font = [UIFont systemFontOfSize:14];
         _textColor = [@"515151" ylt_colorFromHexString];
     }
     return self;

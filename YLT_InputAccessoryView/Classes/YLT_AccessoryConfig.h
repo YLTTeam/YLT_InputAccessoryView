@@ -37,6 +37,16 @@
 @property (nonatomic, strong) UIColor *borderColor;
 
 /**
+ 边框宽度
+ */
+@property (nonatomic, assign) CGFloat borderWidth;
+
+/**
+ 圆角率
+ */
+@property (nonatomic, assign) CGFloat cornerRadius;
+
+/**
  分割线颜色
  */
 @property (nonatomic, strong) UIColor *lineColor;
